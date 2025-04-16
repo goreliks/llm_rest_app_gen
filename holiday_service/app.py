@@ -16,10 +16,9 @@ def get_holiday():
         sales_window = int(request.args.get("sales_window", 30))
         today = datetime.date.today()
         min_date = today + datetime.timedelta(days=sales_window)
-        year = today.year
 
         headers = {"X-Api-Key": NINJAS_API_KEY}
-        params = {"country": country, "year": year}
+        params = {"country": country}
         response = requests.get("https://api.api-ninjas.com/v1/publicholidays", headers=headers, params=params)
         if response.status_code != 200:
             return jsonify({"error": "Error fetching holidays from Ninja API"}), 500
@@ -29,17 +28,6 @@ def get_holiday():
             holiday_date = datetime.datetime.strptime(holiday["date"], "%Y-%m-%d").date()
             if holiday_date >= min_date:
                 upcoming_holidays.append(holiday)
-        # If none found, try next year.
-        if not upcoming_holidays:
-            params = {"country": country, "year": year+1}
-            response = requests.get("https://api.api-ninjas.com/v1/publicholidays", headers=headers, params=params)
-            if response.status_code != 200:
-                return jsonify({"error": "Error fetching holidays for next year"}), 500
-            holidays = response.json()
-            for holiday in holidays:
-                holiday_date = datetime.datetime.strptime(holiday["date"], "%Y-%m-%d").date()
-                if holiday_date >= min_date:
-                    upcoming_holidays.append(holiday)
         if not upcoming_holidays:
             return jsonify({"error": "No upcoming holidays found with sufficient lead time"}), 404
 
