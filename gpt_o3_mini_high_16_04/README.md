@@ -3,8 +3,8 @@
 This multi-service RESTful application helps online sellers identify trending products for upcoming holidays using historical demand data and AI-generated insights. It integrates with external APIs for public holidays (Ninja API), product idea generation (OpenAI API), and trend analysis (SERP API for Google Trends). Validated product recommendations are stored in MongoDB for further reference.
 
 ## Project Structure
-
-experiment_msc/
+```
+gpt_o3_mini_high_16_04/
 ├── orchestrator/
 │   ├── app.py
 │   ├── requirements.txt
@@ -23,7 +23,7 @@ experiment_msc/
 │   └── Dockerfile
 ├── docker-compose.yml
 └── README.md
-
+ ```
 
 ## Configuration
 
