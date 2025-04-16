@@ -1,0 +1,50 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+**/.venv/
+.venv/
+
+# PyCharm / IntelliJ
+**/.idea/
+.idea/
+
+# VSCode
+**/.vscode/
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Environment / config files
+.env
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Python distribution artifacts
+build/
+dist/
+*.egg-info/
+
+# Docker stuff
+**/volumes/
+**/.docker/
+
+# Node (if you end up with frontend in any project)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
