@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  orchestrator:
+    build: ./orchestrator
+    ports:
+      - "5050:5000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - HOLIDAY_SERVICE_URL=http://holiday_service:5001
+      - PRODUCT_SERVICE_URL=http://product_service:5002
+      - TREND_SERVICE_URL=http://trend_service:5003
+    depends_on:
+      - holiday_service
+      - product_service
+      - trend_service
+      - mongodb
+
+  holiday_service:
+    build: ./holiday_service
+    ports:
+      - "5001:5001"
+    environment:
+      - NINJAS_API_KEY=${NINJAS_API_KEY}
+
+  product_service:
+    build: ./product_service
+    ports:
+      - "5002:5002"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  trend_service:
+    build: ./trend_service
+    ports:
+      - "5003:5003"
+    environment:
+      - SERP_API_KEY=${SERP_API_KEY}
+
+  mongodb:
+    image: mongo:5
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
