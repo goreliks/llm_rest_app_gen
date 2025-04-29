@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:5.0
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+  api_service:
+    build: ./api_service
+    ports:
+      - '5001:5001'
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - PDF_PROCESSOR_URL=http://pdf_processor:5002/process
+      - VISUAL_ANALYSIS_URL=http://visual_service:5003/analyze
+      - REPUTATION_URL=http://reputation_service:5004/file
+      - URL_REPUTATION_URL=http://reputation_service:5004/url
+      - LLM_SELECT_URL=http://llm_service:5005/select_url
+      - LLM_SYNTH_URL=http://llm_service:5005/synthesize
+    depends_on:
+      - mongodb
+      - pdf_processor
+      - visual_service
+      - reputation_service
+      - llm_service
+  pdf_processor:
+    build: ./pdf_processor
+    ports:
+      - '5002:5002'
+  visual_service:
+    build: ./visual_service
+    ports:
+      - '5003:5003'
+    environment:
+      - OPENAI_API_KEY
+    depends_on:
+      - pdf_processor
+  reputation_service:
+    build: ./reputation_service
+    ports:
+      - '5004:5004'
+    environment:
+      - VT_API_KEY
+      - URLSCAN_API_KEY
+  llm_service:
+    build: ./llm_service
+    ports:
+      - '5005:5005'
+    environment:
+      - OPENAI_API_KEY
+    depends_on:
+      - visual_service
+      - reputation_service
+volumes:
+  mongo-data: {}
