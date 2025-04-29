@@ -26,7 +26,7 @@ def process():
     # Structural
     reader = PdfReader(io.BytesIO(data))
     info = reader.metadata
-n   features = {
+    features = {
         'javascript': '/JavaScript' in reader.trailer.keys(),
         'encrypted': reader.is_encrypted,
         'forms': bool(reader.trailer.get('/AcroForm'))
