@@ -14,7 +14,7 @@ def select_url():
     data = request.json
     urls = data.get('urls', [])
     visual = data.get('visual_report')
-    prompt = f"Given URLs: {urls} and visual report: {visual}, select the single priority URL or null. Respond JSON {'{'}"priority_url": ...}"}
+    prompt = f"Given URLs: {urls} and visual report: {visual}, select the single priority URL or null. Respond JSON {{\"priority_url\": ...}}"
     try:
         resp = openai.ChatCompletion.create(model="gpt-4o", messages=[{"role":"user","content":prompt}])
         result = json.loads(resp.choices[0].message.content)
