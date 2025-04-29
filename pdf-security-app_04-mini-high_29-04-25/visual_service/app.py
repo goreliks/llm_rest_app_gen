@@ -5,6 +5,7 @@ import logging
 from flask import Flask, request, jsonify
 from pdf2image import convert_from_bytes
 import openai
+import json
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger('visual_service')
