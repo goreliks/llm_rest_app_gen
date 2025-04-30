@@ -1,0 +1,5 @@
+flask
+requests
+pymongo
+PyPDF2
+python-json-logger

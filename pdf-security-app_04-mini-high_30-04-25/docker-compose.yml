@@ -1,0 +1,76 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+  api_service:
+    build: './api_service'
+    container_name: api_service
+    ports:
+      - '5001:5000'
+    environment:
+      - ANALYSIS_SERVICE_URL=http://analysis_service:5000
+      - VISUAL_SERVICE_URL=http://visual_service:5000
+      - VT_SERVICE_URL=http://vt_service:5000
+      - PRIORITIZER_SERVICE_URL=http://prioritizer_service:5000
+      - URLSCAN_SERVICE_URL=http://urlscan_service:5000
+      - SYNTHESIZER_SERVICE_URL=http://synthesizer_service:5000
+      - MONGODB_URI=mongodb://mongodb:27017/pdf_analysis
+      - LOG_LEVEL=INFO
+    depends_on:
+      - analysis_service
+      - visual_service
+      - vt_service
+      - urlscan_service
+      - prioritizer_service
+      - synthesizer_service
+      - mongodb
+  analysis_service:
+    build: './analysis_service'
+    container_name: analysis_service
+    ports:
+      - '5002:5000'
+    environment:
+      - LOG_LEVEL=INFO
+  visual_service:
+    build: './visual_service'
+    container_name: visual_service
+    ports:
+      - '5003:5000'
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LOG_LEVEL=INFO
+  vt_service:
+    build: './vt_service'
+    container_name: vt_service
+    ports:
+      - '5004:5000'
+    environment:
+      - VT_API_KEY=${VT_API_KEY}
+      - LOG_LEVEL=INFO
+  urlscan_service:
+    build: './urlscan_service'
+    container_name: urlscan_service
+    ports:
+      - '5006:5000'
+    environment:
+      - URLSCAN_API_KEY=${URLSCAN_API_KEY}
+      - LOG_LEVEL=INFO
+  prioritizer_service:
+    build: './prioritizer_service'
+    container_name: prioritizer_service
+    ports:
+      - '5005:5000'
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LOG_LEVEL=INFO
+  synthesizer_service:
+    build: './synthesizer_service'
+    container_name: synthesizer_service
+    ports:
+      - '5007:5000'
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LOG_LEVEL=INFO

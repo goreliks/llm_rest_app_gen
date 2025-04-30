@@ -1,0 +1,5 @@
+flask
+pdf2image
+Pillow
+openai
+python-json-logger
