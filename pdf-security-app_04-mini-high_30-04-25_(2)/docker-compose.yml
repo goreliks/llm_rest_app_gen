@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo:4.4
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  service-api:
+    build: ./service-api
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - PDF_SERVICE_URL=http://service-pdf:5002
+      - VISUAL_SERVICE_URL=http://service-visual:5003
+      - REPUTATION_SERVICE_URL=http://service-reputation:5005
+      - LLM_SERVICE_URL=http://service-llm:5004
+      - LOG_LEVEL=INFO
+    ports:
+      - "5001:5001"
+    depends_on:
+      - service-pdf
+      - service-visual
+      - service-llm
+      - service-reputation
+      - mongodb
+
+  service-pdf:
+    build: ./service-pdf
+    environment:
+      - LOG_LEVEL=INFO
+    ports:
+      - "5002:5002"
+
+  service-visual:
+    build: ./service-visual
+    environment:
+      - OPENAI_API_KEY
+      - LOG_LEVEL=INFO
+    ports:
+      - "5003:5003"
+
+  service-llm:
+    build: ./service-llm
+    environment:
+      - OPENAI_API_KEY
+      - LOG_LEVEL=INFO
+    ports:
+      - "5004:5004"
+
+  service-reputation:
+    build: ./service-reputation
+    environment:
+      - VT_API_KEY
+      - URLSCAN_API_KEY
+      - LOG_LEVEL=INFO
+    ports:
+      - "5005:5005"
+
+volumes:
+  mongo_data:
