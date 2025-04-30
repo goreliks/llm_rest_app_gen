@@ -1,5 +1,5 @@
 flask
 pdf2image
 Pillow
-openai
+openai==0.28
 python-json-logger
