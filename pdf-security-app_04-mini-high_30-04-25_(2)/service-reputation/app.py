@@ -24,7 +24,8 @@ def file_reputation():
         headers = {"x-apikey": VT_API_KEY}
         resp = requests.get(f"https://www.virustotal.com/api/v3/files/{sha256}", headers=headers)
         if resp.status_code != 200:
-            return jsonify({"error": "VirusTotal lookup failed", "status_code": resp.status_code}), 502
+            logger.warning(f"VirusTotal response failed — status: {resp.status_code}, body: {resp.text}")
+            return jsonify({"error": "Not found in VirusTotal", "status_code": resp.status_code}), 200
         j = resp.json()
         attrs = j.get("data", {}).get("attributes", {})
         stats = attrs.get("last_analysis_stats", {})
