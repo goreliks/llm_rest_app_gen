@@ -46,12 +46,20 @@ def visual():
         )
 
         # Send to GPT-4o with base64 image
-        user_content = f"{prompt}\nImage (base64):\n{img_b64}"
         response = openai.ChatCompletion.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a security analyst who analyzes PDF page images for deception and anomalies."},
-                {"role": "user", "content": user_content}
+                {"role": "user",
+                 "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url",
+                         "image_url": {
+                                "url": f"data:image/png;base64,{img_b64}"
+                            }
+                        }
+                    ]
+                 }
             ]
         )
         analysis = response.choices[0].message.content
